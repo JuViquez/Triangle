@@ -1,0 +1,23 @@
+! Revisa el tipo de declaracion Rec - varias alternativas
+! dentro del bloque de código.
+
+
+let
+
+  recursive
+
+    proc a() ~ put('Z') end
+
+    and func b(): Integer ~ 5
+
+    and proc c() ~ put('c') end
+
+    and func z(): Char ~ 'A'
+
+  end
+
+in
+
+   putint(1)
+
+end

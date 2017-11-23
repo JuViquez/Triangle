@@ -1,0 +1,15 @@
+
+let
+  var c: Integer;
+  local
+    var a := 5
+  in
+    var b := a + 2
+  end
+
+in
+  b := b + 3;
+  c := b + 6;
+  putint(c)
+
+end

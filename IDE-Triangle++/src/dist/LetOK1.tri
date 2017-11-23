@@ -1,0 +1,8 @@
+
+let
+  var n1 := 1
+in
+
+  putint(n1)
+
+end

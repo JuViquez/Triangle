@@ -1,0 +1,6 @@
+let
+  par var y := 1 and const z ~ 3 and var w : Integer end
+in
+  w := y + z;   ! se exportan todos los indentificadores declarados
+  putint(w)
+end

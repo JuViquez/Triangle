@@ -1,0 +1,8 @@
+loop do !palabra rara
+
+    putint (1) 
+
+  until true
+
+end
+

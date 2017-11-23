@@ -1,0 +1,13 @@
+
+let
+
+  recursive
+    proc hola()~ putint(b) end 
+  and
+    proc hola()~ putint(b) ! error: falta un end de proc 
+end
+in
+
+  putint(b)
+
+end

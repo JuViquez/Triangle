@@ -1,0 +1,7 @@
+! debe dar error de tipo (condición no booleana)
+
+if 1 then
+  putint (1)
+else
+  putint (0)
+end

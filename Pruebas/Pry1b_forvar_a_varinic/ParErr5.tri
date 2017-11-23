@@ -1,0 +1,17 @@
+! Revisa repetición de identificadores
+
+let
+
+par
+
+  var a := 1
+  and
+  const b ~ 1
+  and
+  const a ~ '1' ! repetido
+
+end
+
+in
+  putint (1)
+end

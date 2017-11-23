@@ -1,0 +1,13 @@
+
+let
+  var c : Integer;
+  local
+    const a ~ 7
+  in
+    const b ~ a + 2 
+  end
+in
+  c := b - 2;  
+  putint(c)  
+
+end

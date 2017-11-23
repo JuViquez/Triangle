@@ -1,0 +1,8 @@
+repeat
+
+  until true do
+
+    putint(1) 
+
+end
+

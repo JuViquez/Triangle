@@ -1,0 +1,12 @@
+let
+
+  var x := 2;
+
+  ! error: declarar identificadores distintos, z ya fue declarada
+  par var z := 1 and var z := x + 1 and var i := x end
+
+in
+
+  putint(z)
+
+end

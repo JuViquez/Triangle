@@ -1,0 +1,8 @@
+repeat !falta do
+
+    putint (1) 
+
+  until true
+
+end
+

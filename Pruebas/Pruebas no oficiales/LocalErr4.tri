@@ -1,0 +1,14 @@
+
+let
+
+  local
+    const b ~ 1
+  in
+    const b ~ 1 + 1  ! doble declaracion de constante b
+  end
+
+in
+
+  putint(b)
+
+end

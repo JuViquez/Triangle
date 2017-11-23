@@ -1,0 +1,6 @@
+let 
+ var y := 2;
+ local var x := 3 in var x := 5 end ! doble declaracion de x
+in
+ putint (x)
+end

@@ -1,0 +1,13 @@
+! Revisa las declaraciones mutuamente recursivas
+
+let
+
+recursive
+
+! no hay alternativas, error
+
+end
+
+in
+  putint (1)
+end

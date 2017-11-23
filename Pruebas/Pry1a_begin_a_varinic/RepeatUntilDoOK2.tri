@@ -1,0 +1,10 @@
+repeat
+
+  until true do ! dos comandos
+
+    putint (1) ;
+
+    putint (2)
+
+end
+ 

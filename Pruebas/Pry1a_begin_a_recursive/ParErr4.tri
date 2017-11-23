@@ -1,0 +1,17 @@
+! Declaración colateral con compuesta es inválido
+
+let
+
+par
+
+  var a : Integer
+  and
+  const b ~ 1
+  and
+  local var c : Char in const d ~ 'd' end  ! compuesta no es válida acá
+
+end
+
+in
+  putint (1)
+end

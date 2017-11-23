@@ -1,0 +1,8 @@
+let 
+   par var x := 3 and var y := 5 end;
+   var x := 8	! error: x ya fue declarada
+   
+in
+  putint (y)
+
+end

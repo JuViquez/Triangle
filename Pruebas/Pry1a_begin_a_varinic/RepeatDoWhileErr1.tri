@@ -1,0 +1,8 @@
+repeat do do !sobra un do
+
+    putint(1) 
+
+  while true
+
+end
+

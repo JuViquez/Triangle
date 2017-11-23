@@ -1,0 +1,27 @@
+let
+  recursive
+      proc hola() ~ putint(1); hola() end
+  and ! bye es conocido en la declaracion del procedimiento
+      proc adios(c : Integer) ~ putint(c); hola(); bye()  end
+  and
+      proc bye() ~ hola(); bye() end  
+  and
+      proc let1() ~ let 
+		      recursive    
+			  proc despedirse(n : Integer) ~ putint(n); despedirse(n-1) end 
+		      and
+			  proc saludar(n : Integer) ~ let
+							! error: "a" ya fue declarado
+							var a:=1; var a:=1 
+						      in
+							putint(n)
+						      end end
+		      end
+                    in bye() end end
+  end
+in
+  hola();
+  adios(3);
+  bye()
+  
+end

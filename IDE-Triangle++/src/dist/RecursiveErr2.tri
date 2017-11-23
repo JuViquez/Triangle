@@ -1,0 +1,12 @@
+let
+  var b := 1;
+  recursive
+    proc hola()~ putint(b) end 
+  and
+    proc hola()~ putint(b) end ! error: Identifier hola ya fue declarado
+end
+in
+  hola();
+  putint(b)
+
+end

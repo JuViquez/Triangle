@@ -1,0 +1,18 @@
+! En par, segunda declaración no ve a la primera
+
+let
+
+  var b := 1 ;
+
+par
+
+
+  const b ~ 'a'
+  and
+  var c := b
+
+end
+
+in
+  putint (c) ! c debe ser entero 1, no char 'a'
+end

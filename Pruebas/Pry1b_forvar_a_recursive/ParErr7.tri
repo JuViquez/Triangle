@@ -1,0 +1,25 @@
+! x no debería ver a a ni a b
+
+let
+
+  par
+
+        var a := 8
+
+  and   var b := 6
+
+  and   const x ~ a + b
+
+
+
+  end
+
+in
+
+  putint (a);
+
+  putint (x);
+
+  putint (b)
+
+end

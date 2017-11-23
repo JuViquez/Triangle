@@ -1,0 +1,15 @@
+! Segunda declaración no debe ver a la primera: hay que detectarlo
+
+let
+
+par
+
+  const b ~ 'a'
+  and
+  var c := b
+
+end
+
+in
+  putint (1)
+end

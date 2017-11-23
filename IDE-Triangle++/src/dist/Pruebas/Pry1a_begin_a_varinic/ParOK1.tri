@@ -1,0 +1,15 @@
+! Sintaxis OK
+
+let
+
+par
+
+  var a : Integer
+  and
+  const b ~ 1 
+
+end
+
+in
+  putint (1)
+end

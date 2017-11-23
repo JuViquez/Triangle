@@ -1,0 +1,17 @@
+! Debería fallar porque solo hay una declaración
+
+let
+
+recursive
+
+  proc a() ~
+    put('Z')
+  ! falta el end del proc
+
+end ! del recursive
+
+in
+
+  putint(1)
+
+end

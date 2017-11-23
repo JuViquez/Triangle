@@ -1,0 +1,16 @@
+let
+  var a : Integer;
+  var b : Integer;
+
+  recursive
+  func succ(x: Integer): Integer ~ prev(x) + 2
+  and
+  proc add(x: Integer, y: Integer) ~ let var c := succ(x) + prev(y) in skip end end
+  and 
+  func prev(x: Integer): Integer ~ x - 1 
+  end
+
+in
+    a := succ(2);
+    b := prev(2)
+end

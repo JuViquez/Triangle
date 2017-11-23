@@ -1,0 +1,13 @@
+! if (o let) sin end
+
+let
+
+  var a := 1
+
+in 
+  if a > 0 then 
+    put ('M')
+  else
+    put ('m')
+
+end ! del if (o del let), falta uno

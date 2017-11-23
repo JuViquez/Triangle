@@ -1,0 +1,10 @@
+loop ! palabra extraña
+
+  until true do
+
+    putint (1) ;
+
+    putint (2)
+
+end
+

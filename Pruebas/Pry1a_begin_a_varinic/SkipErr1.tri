@@ -1,0 +1,10 @@
+! el comando vacío debe ser explícitamente skip
+
+let
+  var a := 1
+in
+  
+  a := 1 ; ! ';' no es un terminador de comandos, sino un separador
+  
+end
+ 

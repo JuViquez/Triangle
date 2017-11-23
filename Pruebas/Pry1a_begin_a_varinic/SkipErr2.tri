@@ -1,0 +1,9 @@
+! ver si solo admiten skip como comando vacío
+
+let const a ~ 1
+in
+  ;
+end 
+
+
+

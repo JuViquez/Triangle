@@ -1,0 +1,15 @@
+! Debería fallar porque solo hay una declaración
+
+let
+
+recursive
+
+  proc a() ~ put('Z')
+  end
+end
+
+in
+
+  putint(1)
+
+end

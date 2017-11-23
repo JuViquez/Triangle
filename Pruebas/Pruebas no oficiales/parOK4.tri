@@ -1,0 +1,7 @@
+let
+  var t := 10;
+  par proc procedimiento()~ let var h := 4;var q:=h in skip end end and var y := 1 and const z ~ 3 and var w : Integer end
+in
+  w := y + z;   ! se exportan todos los indentificadores declarados
+  putint(w)
+end

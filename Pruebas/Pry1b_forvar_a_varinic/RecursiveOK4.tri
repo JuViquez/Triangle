@@ -1,0 +1,23 @@
+! Revisa que haya más de un comando en cada cuerpo y que recursive pueda componerse (secuencialmente) con otras declaraciones
+
+let
+
+  recursive
+
+    proc a() ~ put('Z') ; putint (0) end
+    and
+    func b(): Integer ~ 5
+    and
+    proc c() ~ put('c') ; putint (1) end
+    and
+    func z(): Char ~ 'A'
+
+  end ; ! sigue procesando bien las declaraciones secuenciales
+
+  var x : Integer
+
+  in
+
+   putint(x + b())
+
+end

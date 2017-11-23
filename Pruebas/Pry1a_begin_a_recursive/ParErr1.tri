@@ -1,0 +1,13 @@
+! Revisa par
+
+let
+
+par
+
+    var a : Integer ! una sola declaración es un error
+
+end
+
+in
+  putint (1)
+end

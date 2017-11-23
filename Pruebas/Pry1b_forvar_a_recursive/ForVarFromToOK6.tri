@@ -1,0 +1,6 @@
+  for var i := 10 to 1 do 
+
+    putint (i) ! no debe imprimir nada, porque val inicial es > que val final
+
+  end
+

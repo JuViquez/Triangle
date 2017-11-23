@@ -1,0 +1,23 @@
+let
+  recursive
+      proc hola() ~ putint(1); hola() end
+  and
+      proc adios(c : Integer) ~ putint(c); hola() end
+  and
+      proc bye() ~ hola(); adios(3) end
+  and
+      proc let1() ~ let 
+		      recursive    
+			  proc hola2() ~ hola() end 
+		      and
+			  proc saludar(n : Integer) ~ putint(n);
+						      saludar(n-1) end
+		      end
+                    in skip end end
+  end
+in
+  hola();
+  adios(3);
+  bye()
+  
+end

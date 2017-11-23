@@ -1,0 +1,10 @@
+repeat do
+
+    putint (1) ;
+
+    putint (2)
+
+  until true
+
+end
+

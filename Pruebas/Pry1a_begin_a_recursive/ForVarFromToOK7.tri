@@ -1,0 +1,8 @@
+let
+  var k := 10
+in
+  for var i := 1 to k do ! determinar que k se evalúa una sola vez
+    k := 0 ; ! el valor del límite superior se establece arriba
+    putint (i) ! debe imprimir los números del 1 al 10, sin espacios entre ellos
+  end
+end

@@ -1,0 +1,14 @@
+! par sin end
+
+let
+
+par
+
+  var a : Integer
+  and
+  const b ~ 1 
+! end faltó el end
+
+in
+  putint (1)
+end

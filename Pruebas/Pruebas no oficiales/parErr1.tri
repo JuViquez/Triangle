@@ -1,0 +1,12 @@
+let
+
+  var x := 2;
+
+  ! error de scope: z no esta declarada
+  par var z := 1 and var c := x + z and var i := x end
+
+in
+
+  putint(z)
+
+end

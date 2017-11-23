@@ -1,0 +1,10 @@
+for
+
+  var i := 1 to 10 until do !falta condición
+
+    putint (1); ! dos comandos
+
+    putint (2) 
+
+end
+

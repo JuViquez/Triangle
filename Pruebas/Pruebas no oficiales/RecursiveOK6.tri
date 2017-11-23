@@ -1,0 +1,13 @@
+let
+  var a : Integer;
+  var b : Integer;
+
+  recursive
+    func succ(x: Integer): Integer ~ x + 1  
+  and
+    func prev(x: Integer): Integer ~ x - 1 
+  end
+in
+    a := succ(2);
+    b := prev(2)
+end

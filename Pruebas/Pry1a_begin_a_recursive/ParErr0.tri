@@ -1,0 +1,13 @@
+! Revisa el tipo de declaración par
+
+let
+
+par
+
+    ! ninguna declaración: error
+
+end
+
+in
+  putint (1)
+end

@@ -1,0 +1,13 @@
+
+let
+  var c : Integer;
+  local
+    const a ~ 7
+  in
+    const b ~ 2  
+  end
+in
+  c := a + b;  ! 'a' no se exporta, por lo que 'a' no esta declarada
+  putint(c)  
+
+end

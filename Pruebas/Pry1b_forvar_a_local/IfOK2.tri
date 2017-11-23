@@ -1,0 +1,7 @@
+! debe imprimir 1
+
+if true then
+  putint (1)
+else
+  putint (0)
+end

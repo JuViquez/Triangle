@@ -1,0 +1,10 @@
+! no se acepta el begin ... end
+
+repeat while true do begin
+
+    putint (1) ;
+
+    putint (2)
+
+end
+

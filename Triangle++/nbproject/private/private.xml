@@ -3,9 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Jose%20Salas/Google%20Drive/Progra%20Compi/Triangulo%20Extentido/Triangle++/src/Triangle/ContextualAnalyzer/Checker.java</file>
-            <file>file:/C:/Users/Jose%20Salas/Google%20Drive/Progra%20Compi/Triangulo%20Extentido/Triangle++/src/Triangle/ContextualAnalyzer/IdentificationTable.java</file>
-            <file>file:/C:/Users/Jose%20Salas/Google%20Drive/Progra%20Compi/Triangulo%20Extentido/Triangle++/src/Triangle/ContextualAnalyzer/IdEntry.java</file>
+            <file>file:/C:/Users/jviqu/OneDrive/carrera/II%20semestre%202017/Compi/Triangle/Triangle++/src/Triangle/CodeGenerator/EqualityRoutine.java</file>
+            <file>file:/C:/Users/jviqu/OneDrive/carrera/II%20semestre%202017/Compi/Triangle/Triangle++/src/Triangle/CodeGenerator/KnownValue.java</file>
+            <file>file:/C:/Users/jviqu/OneDrive/carrera/II%20semestre%202017/Compi/Triangle/Triangle++/src/Triangle/CodeGenerator/Frame.java</file>
+            <file>file:/C:/Users/jviqu/OneDrive/carrera/II%20semestre%202017/Compi/Triangle/Triangle++/src/TAM/Instruction.java</file>
+            <file>file:/C:/Users/jviqu/OneDrive/carrera/II%20semestre%202017/Compi/Triangle/Triangle++/src/TAM/Disassembler.java</file>
+            <file>file:/C:/Users/jviqu/OneDrive/carrera/II%20semestre%202017/Compi/Triangle/Triangle++/src/TAM/Machine.java</file>
+            <file>file:/C:/Users/jviqu/OneDrive/carrera/II%20semestre%202017/Compi/Triangle/Triangle++/src/Triangle/CodeGenerator/Encoder.java</file>
+            <file>file:/C:/Users/jviqu/OneDrive/carrera/II%20semestre%202017/Compi/Triangle/Triangle++/src/TAM/Interpreter.java</file>
+            <file>file:/C:/Users/jviqu/OneDrive/carrera/II%20semestre%202017/Compi/Triangle/Triangle++/src/Triangle/CodeGenerator/Field.java</file>
         </group>
     </open-files>
 </project-private>

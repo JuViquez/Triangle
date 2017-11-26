@@ -563,7 +563,7 @@ public class Interpreter {
         case Machine.JUMPIFop:
           ST = ST - 1;
           if (data[ST] == n)
-            CP = d + content(r);
+            CP = d + content(r); 
           else
             CP = CP + 1;
           break;

@@ -171,35 +171,131 @@ public final class Encoder implements Visitor {
     return null;
   }
   
-  /* Falta por implementar commands */
-  @Override
-  public Object visitUntilCommand(UntilCommand aThis, Object o) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  public Object visitUntilCommand(UntilCommand ast, Object o) {
+    Frame frame = (Frame) o;
+    int jumpAddr, loopAddr;
+
+    jumpAddr = nextInstrAddr;
+    emit(Machine.JUMPop, 0, Machine.CBr, 0);
+    loopAddr = nextInstrAddr;
+    ast.C.visit(this, frame);
+    patch(jumpAddr, nextInstrAddr);
+    ast.E.visit(this, frame);
+    emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, loopAddr);
+    return null;
   }
 
-  @Override
-  public Object visitDoWhileCommand(DoWhileCommand aThis, Object o) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  public Object visitDoWhileCommand(DoWhileCommand ast, Object o) {
+    Frame frame = (Frame) o;
+    int loopAddr;
+
+    loopAddr = nextInstrAddr;
+    ast.C.visit(this, frame);
+    ast.E.visit(this, frame);
+    emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+    return null;
   }
 
-  @Override
-  public Object visitDoUntilCommand(DoUntilCommand aThis, Object o) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  public Object visitDoUntilCommand(DoUntilCommand ast, Object o) {
+    Frame frame = (Frame) o;
+    int loopAddr;
+
+    loopAddr = nextInstrAddr;
+    ast.C.visit(this, frame);
+    ast.E.visit(this, frame);
+    emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, loopAddr);
+    return null;
   }
 
-  @Override
-  public Object visitForCommand(ForCommand aThis, Object o) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  public Object visitForCommand(ForCommand ast, Object o) {
+     Frame frame = (Frame) o;
+     int loopAddr, jumpAddr, idAddr, exp2Addr;
+     
+     exp2Addr = nextInstrAddr;
+     ast.E.visit(this, frame);
+     
+     idAddr = nextInstrAddr;
+     ast.D.visit(this, frame);   
+     
+     jumpAddr = nextInstrAddr;
+     emit(Machine.JUMPop, 0, Machine.CBr, 0);
+     
+     loopAddr = nextInstrAddr;
+     ast.C.visit(this, frame);
+     emit(Machine.CALLop, idAddr, Machine.PBr, Machine.succDisplacement);
+     
+     patch(jumpAddr, nextInstrAddr);
+     emit(Machine.LOADop, 2, Machine.CBr, exp2Addr);
+     emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.geDisplacement);
+     emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+     emit(Machine.POPop, 0, 0, 2);
+     
+     return null;
   }
 
-  @Override
-  public Object visitForWhileCommand(ForWhileCommand aThis, Object o) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  public Object visitForWhileCommand(ForWhileCommand ast, Object o) {
+      Frame frame = (Frame) o;
+     int loopAddr, jumpAddr, jumpAddr2, idAddr, exp1Addr;
+     
+     exp1Addr = nextInstrAddr;
+     ast.E1.visit(this, frame);
+     
+     idAddr = nextInstrAddr;
+     ast.D.visit(this, frame);   
+     
+     jumpAddr = nextInstrAddr;
+     emit(Machine.JUMPop, 0, Machine.CBr, 0);
+     
+     loopAddr = nextInstrAddr;
+     ast.E2.visit(this, frame);
+     
+     jumpAddr2 = nextInstrAddr;
+     emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, 0);
+     
+     ast.C.visit(this, frame);
+     emit(Machine.CALLop, idAddr, Machine.PBr, Machine.succDisplacement);
+     patch(jumpAddr, nextInstrAddr);
+     emit(Machine.LOADop, 2, Machine.CBr, exp1Addr);
+     emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.geDisplacement);
+     emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+     
+     patch(jumpAddr2, nextInstrAddr);
+     emit(Machine.POPop, 0, 0, 2);
+     
+     return null;
   }
 
-  @Override
-  public Object visitForUntilCommand(ForUntilCommand aThis, Object o) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  public Object visitForUntilCommand(ForUntilCommand ast, Object o) {
+     Frame frame = (Frame) o;
+     int loopAddr, jumpAddr, jumpAddr2, idAddr, exp1Addr;
+     
+     exp1Addr = nextInstrAddr;
+     ast.E1.visit(this, frame);
+     
+     idAddr = nextInstrAddr;
+     ast.D.visit(this, frame);   
+     
+     jumpAddr = nextInstrAddr;
+     emit(Machine.JUMPop, 0, Machine.CBr, 0);
+     
+     loopAddr = nextInstrAddr;
+     ast.E2.visit(this, frame);
+     
+     jumpAddr2 = nextInstrAddr;
+     emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, 0);
+     
+     ast.C.visit(this, frame);
+     emit(Machine.CALLop, idAddr, Machine.PBr, Machine.succDisplacement);
+     patch(jumpAddr, nextInstrAddr);
+     emit(Machine.LOADop, 2, Machine.CBr, exp1Addr);
+     emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.geDisplacement);
+     emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+     
+     patch(jumpAddr2, nextInstrAddr);
+     emit(Machine.POPop, 0, 0, 2);
+     
+     return null;
+     
   }
   /* fin commands */
 
@@ -260,7 +356,6 @@ public final class Encoder implements Visitor {
   }
 
   public Object visitIntegerExpression(IntegerExpression ast, Object o) {
-    Frame frame = (Frame) o;
     Integer valSize = (Integer) ast.type.visit(this, null);
     emit(Machine.LOADLop, 0, 0, Integer.parseInt(ast.IL.spelling));
     return valSize;
@@ -324,6 +419,15 @@ public final class Encoder implements Visitor {
     writeTableDetails(ast);
     return new Integer(extraSize);
   }
+  
+  public Object visitForVarDeclaration(ForVarDeclaration ast, Object o) {
+    IntegerLiteral IL = ((IntegerExpression) ast.E).IL;
+        ast.entity = new KnownValue(Machine.integerSize,
+				 Integer.parseInt(IL.spelling));
+    writeTableDetails(ast);
+    return new Integer(0);
+ }
+
 
   public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
     Frame frame = (Frame) o;
@@ -912,7 +1016,7 @@ public final class Encoder implements Visitor {
     if (n > 255) {
         reporter.reportRestriction("length of operand can't exceed 255 words");
         n = 255; // to allow code generation to continue
-    }
+    }   
     nextInstr.op = op;
     nextInstr.n = n;
     nextInstr.r = r;
@@ -1068,11 +1172,7 @@ public final class Encoder implements Visitor {
     }
   }
 
-    @Override
-    public Object visitForVarDeclaration(ForVarDeclaration aThis, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+ 
     
 
     

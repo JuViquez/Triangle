@@ -503,21 +503,45 @@ public final class Encoder implements Visitor {
     writeTableDetails(ast);
     return new Integer(extraSize);
   }
-  /* Falta por implementar Declarations */
-  @Override
+ 
   public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      Frame frame = (Frame) o;
+      int extraSize1, extraSize2;
+      extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
+      extraSize2 = ((Integer) ast.D2.visit(this, frame)).intValue();
+      return new Integer(extraSize1 + extraSize2);
   }
 
-  @Override
   public Object visitVarInitializeDeclaration(VarInitializeDeclaration ast, Object o) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    Frame frame = (Frame) o;
+    int extraSize = 0;
+
+    if (ast.E instanceof CharacterExpression) {
+        CharacterLiteral CL = ((CharacterExpression) ast.E).CL;
+        ast.entity = new KnownValue(Machine.characterSize,
+                                 characterValuation(CL.spelling));
+    } else if (ast.E instanceof IntegerExpression) {
+        IntegerLiteral IL = ((IntegerExpression) ast.E).IL;
+        ast.entity = new KnownValue(Machine.integerSize,
+				 Integer.parseInt(IL.spelling));
+    } else {
+      int valSize = ((Integer) ast.E.visit(this, frame)).intValue();
+      ast.entity = new UnknownValue(valSize, frame.level, frame.size);
+      extraSize = valSize;
+    }
+    writeTableDetails(ast);
+    return new Integer(extraSize);
   }
   
-  @Override
   public Object visitParDeclaration(ParDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    Frame frame = (Frame) o;
+    int extraSize1, extraSize2;
+
+    extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
+    Frame frame1 = new Frame (frame, extraSize1);
+    extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
+    return new Integer(extraSize1 + extraSize2);
+  }
     
   @Override
   public Object visitProcFuncDeclaration(ProcFuncDeclaration ast, Object o) {

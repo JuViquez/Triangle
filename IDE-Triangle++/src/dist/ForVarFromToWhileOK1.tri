@@ -1,8 +1,8 @@
 for
 
-  var i := 1 to 10 while true do
+  var i := 1 to 10 until i < 5  do
 
-    putint (1)
+    putint (i)
 
 end
  

@@ -424,7 +424,7 @@ public class Parser {
                 Command cAST = parseCommand();
                 accept(Token.END);
                 finish(commandPos);
-                commandAST = new ForWhileCommand(dAST , eAST, e2AST,  cAST, commandPos); 
+                commandAST = new ForUntilCommand(dAST , eAST, e2AST,  cAST, commandPos); 
             }
             break;
             default:

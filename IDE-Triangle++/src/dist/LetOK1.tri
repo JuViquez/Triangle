@@ -1,8 +1,9 @@
 
 let
-  var n1 := 1
+  var n1 := 5;
+  var n2 := 2
 in
-
-  putint(n1)
+  putint(n1);
+  putint(n2)
 
 end

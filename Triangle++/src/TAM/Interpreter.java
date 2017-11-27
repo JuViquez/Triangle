@@ -451,6 +451,8 @@ public class Interpreter {
       r = currentInstr.r;
       n = currentInstr.n;
       d = currentInstr.d;
+      
+        
       // Execute instruction ...
       switch (op) {
         case Machine.LOADop:

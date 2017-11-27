@@ -209,13 +209,14 @@ public final class Encoder implements Visitor {
 
   public Object visitForCommand(ForCommand ast, Object o) {
      Frame frame = (Frame) o;
-     int loopAddr, jumpAddr, idAddr, exp2Addr;
+     int loopAddr, jumpAddr, idAddr, exp2Addr, extraSize, extraSize2;
      
      exp2Addr = nextInstrAddr;
-     ast.E.visit(this, frame);
+     extraSize = (Integer) ast.E.visit(this, frame);
      
+     Frame frame1 = new Frame (frame, extraSize);
      idAddr = nextInstrAddr;
-     ast.D.visit(this, frame);   
+     extraSize2 = ((Integer) ast.D.visit(this, frame1)).intValue();   
      
      jumpAddr = nextInstrAddr;
      emit(Machine.JUMPop, 0, Machine.CBr, 0);
@@ -225,23 +226,24 @@ public final class Encoder implements Visitor {
      emit(Machine.CALLop, idAddr, Machine.PBr, Machine.succDisplacement);
      
      patch(jumpAddr, nextInstrAddr);
-     emit(Machine.LOADop, 2, Machine.CBr, exp2Addr);
+     emit(Machine.LOADop, extraSize + extraSize2, Machine.CBr, exp2Addr);
      emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.geDisplacement);
      emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
-     emit(Machine.POPop, 0, 0, 2);
+     emit(Machine.POPop, 0, 0, extraSize + extraSize2);
      
      return null;
   }
 
   public Object visitForWhileCommand(ForWhileCommand ast, Object o) {
       Frame frame = (Frame) o;
-     int loopAddr, jumpAddr, jumpAddr2, idAddr, exp1Addr;
+     int loopAddr, jumpAddr, jumpAddr2, idAddr, exp1Addr, extraSize, extraSize2;
      
      exp1Addr = nextInstrAddr;
-     ast.E1.visit(this, frame);
+     extraSize = (Integer)ast.E1.visit(this, frame);
      
+     Frame frame1 = new Frame (frame, extraSize);
      idAddr = nextInstrAddr;
-     ast.D.visit(this, frame);   
+     extraSize2 = ((Integer) ast.D.visit(this, frame1)).intValue();      
      
      jumpAddr = nextInstrAddr;
      emit(Machine.JUMPop, 0, Machine.CBr, 0);
@@ -255,25 +257,26 @@ public final class Encoder implements Visitor {
      ast.C.visit(this, frame);
      emit(Machine.CALLop, idAddr, Machine.PBr, Machine.succDisplacement);
      patch(jumpAddr, nextInstrAddr);
-     emit(Machine.LOADop, 2, Machine.CBr, exp1Addr);
+     emit(Machine.LOADop, extraSize + extraSize2, Machine.CBr, exp1Addr);
      emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.geDisplacement);
      emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
      
      patch(jumpAddr2, nextInstrAddr);
-     emit(Machine.POPop, 0, 0, 2);
+     emit(Machine.POPop, 0, 0, extraSize + extraSize2);
      
      return null;
   }
 
   public Object visitForUntilCommand(ForUntilCommand ast, Object o) {
      Frame frame = (Frame) o;
-     int loopAddr, jumpAddr, jumpAddr2, idAddr, exp1Addr;
+     int loopAddr, jumpAddr, jumpAddr2, idAddr, exp1Addr, extraSize, extraSize2;
      
      exp1Addr = nextInstrAddr;
-     ast.E1.visit(this, frame);
+     extraSize = (Integer)ast.E1.visit(this, frame);
      
+     Frame frame1 = new Frame (frame, extraSize);
      idAddr = nextInstrAddr;
-     ast.D.visit(this, frame);   
+     extraSize2 = ((Integer) ast.D.visit(this, frame1)).intValue();      
      
      jumpAddr = nextInstrAddr;
      emit(Machine.JUMPop, 0, Machine.CBr, 0);
@@ -287,12 +290,12 @@ public final class Encoder implements Visitor {
      ast.C.visit(this, frame);
      emit(Machine.CALLop, idAddr, Machine.PBr, Machine.succDisplacement);
      patch(jumpAddr, nextInstrAddr);
-     emit(Machine.LOADop, 2, Machine.CBr, exp1Addr);
+     emit(Machine.LOADop, extraSize + extraSize2, Machine.CBr, exp1Addr);
      emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.geDisplacement);
      emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
      
      patch(jumpAddr2, nextInstrAddr);
-     emit(Machine.POPop, 0, 0, 2);
+     emit(Machine.POPop, 0, 0, extraSize + extraSize2);
      
      return null;
      
@@ -356,6 +359,7 @@ public final class Encoder implements Visitor {
   }
 
   public Object visitIntegerExpression(IntegerExpression ast, Object o) {
+    Frame frame = (Frame) o;
     Integer valSize = (Integer) ast.type.visit(this, null);
     emit(Machine.LOADLop, 0, 0, Integer.parseInt(ast.IL.spelling));
     return valSize;
@@ -421,11 +425,11 @@ public final class Encoder implements Visitor {
   }
   
   public Object visitForVarDeclaration(ForVarDeclaration ast, Object o) {
-    IntegerLiteral IL = ((IntegerExpression) ast.E).IL;
-        ast.entity = new KnownValue(Machine.integerSize,
-				 Integer.parseInt(IL.spelling));
+    Frame frame = (Frame) o;
+    int extraSize = (Integer) ast.E.visit(this, frame);
+    ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
     writeTableDetails(ast);
-    return new Integer(0);
+    return new Integer(extraSize);
  }
 
 
@@ -505,30 +509,19 @@ public final class Encoder implements Visitor {
   }
  
   public Object visitLocalDeclaration(LocalDeclaration ast, Object o) {
-      Frame frame = (Frame) o;
-      int extraSize1, extraSize2;
-      extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
-      extraSize2 = ((Integer) ast.D2.visit(this, frame)).intValue();
-      return new Integer(extraSize1 + extraSize2);
+    Frame frame = (Frame) o;
+    int extraSize1, extraSize2;
+
+    extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
+    Frame frame1 = new Frame (frame, extraSize1);
+    extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
+    return new Integer(extraSize1 + extraSize2);
   }
 
   public Object visitVarInitializeDeclaration(VarInitializeDeclaration ast, Object o) {
     Frame frame = (Frame) o;
-    int extraSize = 0;
-
-    if (ast.E instanceof CharacterExpression) {
-        CharacterLiteral CL = ((CharacterExpression) ast.E).CL;
-        ast.entity = new KnownValue(Machine.characterSize,
-                                 characterValuation(CL.spelling));
-    } else if (ast.E instanceof IntegerExpression) {
-        IntegerLiteral IL = ((IntegerExpression) ast.E).IL;
-        ast.entity = new KnownValue(Machine.integerSize,
-				 Integer.parseInt(IL.spelling));
-    } else {
-      int valSize = ((Integer) ast.E.visit(this, frame)).intValue();
-      ast.entity = new UnknownValue(valSize, frame.level, frame.size);
-      extraSize = valSize;
-    }
+    int extraSize = (Integer) ast.E.visit(this, frame);
+    ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size);
     writeTableDetails(ast);
     return new Integer(extraSize);
   }
@@ -538,20 +531,28 @@ public final class Encoder implements Visitor {
     int extraSize1, extraSize2;
 
     extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
+    extraSize2 = ((Integer) ast.D2.visit(this, frame)).intValue();
+    return new Integer(extraSize1 + extraSize2);
+  }
+    
+  public Object visitProcFuncDeclaration(ProcFuncDeclaration ast, Object o) {
+    Frame frame = (Frame) o;
+    int extraSize1, extraSize2;
+
+    extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
+    extraSize2 = ((Integer) ast.D2.visit(this, frame)).intValue();
+    return new Integer(extraSize1 + extraSize2);
+  }
+  
+  public Object visitCompoundDeclaration(CompoundDeclaration ast, Object o) {
+    Frame frame = (Frame) o;
+    int extraSize1, extraSize2;
+
+    extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
     Frame frame1 = new Frame (frame, extraSize1);
     extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
     return new Integer(extraSize1 + extraSize2);
   }
-    
-  @Override
-  public Object visitProcFuncDeclaration(ProcFuncDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-  
-  @Override
-  public Object visitCompoundDeclaration(CompoundDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
   /* fin Declaration */
   

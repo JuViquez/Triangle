@@ -2,14 +2,18 @@
 let
   var c: Integer;
   local
-    var a := 5
+    var a := 3
   in
-    var b := a + 2
+    var b := 1 + a
   end
 
 in
+  putint(b);
+  puteol();
   b := b + 3;
-  c := b + 6;
+  putint(b);
+  puteol();
+  c := b + 1;
   putint(c)
 
 end

@@ -4,12 +4,12 @@ let
 
 recursive
 
-  proc a() ~ put('Z') end ! tiene el end
+  func a(x: Integer): Integer ~ 5 + x + m()
   and
   func m(): Integer ~ 10
 
 end
 
 in
-  putint (1)
+  putint (a(0))
 end

@@ -101,6 +101,10 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.Vname;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Map;
 
 
 public final class Encoder implements Visitor {
@@ -437,8 +441,10 @@ public final class Encoder implements Visitor {
     Frame frame = (Frame) o;
     int jumpAddr = nextInstrAddr;
     int argsSize = 0, valSize = 0;
-
+    
     emit(Machine.JUMPop, 0, Machine.CBr, 0);
+    if(this.inRecursive)
+        patchRecursiveIds(ast.I.spelling);
     ast.entity = new KnownRoutine(Machine.closureSize, frame.level, nextInstrAddr);
     writeTableDetails(ast);
     if (frame.level == Machine.maxRoutineLevel)
@@ -448,11 +454,12 @@ public final class Encoder implements Visitor {
       argsSize = ((Integer) ast.FPS.visit(this, frame1)).intValue();
       Frame frame2 = new Frame(frame.level + 1, Machine.linkDataSize);
       valSize = ((Integer) ast.E.visit(this, frame2)).intValue();
+   
     }
     emit(Machine.RETURNop, valSize, 0, argsSize);
     patch(jumpAddr, nextInstrAddr);
-    return new Integer(0);
-  }
+   return new Integer(0);
+ }
 
   public Object visitProcDeclaration(ProcDeclaration ast, Object o) {
     Frame frame = (Frame) o;
@@ -460,6 +467,8 @@ public final class Encoder implements Visitor {
     int argsSize = 0;
 
     emit(Machine.JUMPop, 0, Machine.CBr, 0);
+    if(this.inRecursive)
+        patchRecursiveIds(ast.I.spelling);
     ast.entity = new KnownRoutine (Machine.closureSize, frame.level,
                                 nextInstrAddr);
     writeTableDetails(ast);
@@ -539,10 +548,13 @@ public final class Encoder implements Visitor {
   public Object visitProcFuncDeclaration(ProcFuncDeclaration ast, Object o) {
     Frame frame = (Frame) o;
     int extraSize1, extraSize2;
-
-    extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
+    inRecursive = true;
+    extraSize1 = ((Integer) ast.D2.visit(this, frame)).intValue();
+    if(!inRecursive) inRecursive = true;
     Frame frame1 = new Frame (frame, extraSize1);
-    extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
+    extraSize2 = ((Integer) ast.D1.visit(this, frame1)).intValue();
+    inRecursive = false;
+    recursiveIds = new Hashtable<String, ArrayList<Integer>>();
     return new Integer(extraSize1 + extraSize2);
   }
   
@@ -820,7 +832,7 @@ public final class Encoder implements Visitor {
 
   public Object visitIdentifier(Identifier ast, Object o) {
     Frame frame = (Frame) o;
-    if (ast.decl.entity instanceof KnownRoutine) {
+    if (ast.decl.entity instanceof KnownRoutine) { 
       ObjectAddress address = ((KnownRoutine) ast.decl.entity).address;
       emit(Machine.CALLop, displayRegister(frame.level, address.level),
 	   Machine.CBr, address.displacement);
@@ -837,9 +849,12 @@ public final class Encoder implements Visitor {
       int displacement = ((EqualityRoutine) ast.decl.entity).displacement;
       emit(Machine.LOADLop, 0, 0, frame.size / 2);
       emit(Machine.CALLop, Machine.SBr, Machine.PBr, displacement);
+    }else if(inRecursive){
+        addRecursiveId(ast.spelling);
     }
     return null;
   }
+ 
 
   public Object visitIntegerLiteral(IntegerLiteral ast, Object o) {
     return null;
@@ -924,6 +939,8 @@ public final class Encoder implements Visitor {
   public Encoder (ErrorReporter reporter) {
     this.reporter = reporter;
     nextInstrAddr = Machine.CB;
+    inRecursive = false;
+    recursiveIds = new Hashtable<String, ArrayList<Integer>>();
     elaborateStdEnvironment();
   }
 
@@ -1025,6 +1042,9 @@ public final class Encoder implements Visitor {
   }
 
   boolean tableDetailsReqd;
+  
+  boolean inRecursive;
+  Dictionary<String, ArrayList<Integer>> recursiveIds;
 
   public static void writeTableDetails(AST ast) {
   }
@@ -1198,6 +1218,29 @@ public final class Encoder implements Visitor {
       }
     }
   }
+
+    private void addRecursiveId(String id) {
+        if(this.recursiveIds.get(id) == null){
+            ArrayList<Integer> l = new ArrayList<Integer>();
+            l.add(nextInstrAddr);
+            this.recursiveIds.put(id, l);
+        }else{
+            ArrayList<Integer> l = this.recursiveIds.get(id);
+            l.add(nextInstrAddr);
+            this.recursiveIds.put(id, l);
+            
+        }
+        emit(Machine.CALLop, 0, Machine.CBr, 0);
+    }
+
+   private void patchRecursiveIds(String id) {
+        if(this.recursiveIds.get(id) != null){
+            ArrayList<Integer> Ids = this.recursiveIds.get(id);
+            for (int i = 0; i < Ids.size(); i++) {
+                patch(Ids.get(i),nextInstrAddr);
+            }    
+        }    
+ }
 
  
     

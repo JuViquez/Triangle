@@ -16,8 +16,6 @@ let
                     in skip end end
   end
 in
-  hola();
-  adios(3);
-  bye()
+  hola()
   
 end

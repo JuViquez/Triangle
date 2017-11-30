@@ -2,6 +2,5 @@ let
   var x := 2;
   par var y := 1 and var z := x and var w := x end
 in
-  putint(x);
   putint(y + z + w)
 end

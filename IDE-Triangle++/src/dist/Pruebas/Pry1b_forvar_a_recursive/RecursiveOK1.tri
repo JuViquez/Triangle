@@ -1,15 +1,18 @@
 ! Revisa las declaraciones mutuamente recursivas
 
 let
-
+var b := 0;
 recursive
-
-  func a(x: Integer): Integer ~ 5 + x + m()
+  proc c() ~ putint(m(10)+ a(5)) end
   and
-  func m(): Integer ~ 10
+  func a(x: Integer): Integer ~ x
+  and
+  func m(x: Integer): Integer ~ 10 + a(5) + x
+  and 
+  proc z() ~ c(); putint(m(20)+ a(5)) end
 
 end
 
 in
-  putint (a(0))
+  z()
 end

@@ -1,6 +1,13 @@
-  for var i := 1 to 10 do 
+let
+   var x := 0
+in 
+ for var i := 1 to 2 do 
 
     putint (i) ! debe imprimir del 1 al 10
 
-  end
+ end;
+for var j := 5 to 5 do
+   putint(j)
+end
 
+end

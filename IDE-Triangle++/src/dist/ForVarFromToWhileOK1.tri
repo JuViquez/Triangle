@@ -1,8 +1,10 @@
-for
 
-  var i := 1 to 10 until i < 5  do
-
-    putint (i)
+for var i := 1 to 10 while i < 5  do
+ for var j := 5 to 10 while i < 5  do
+   putint (j)
 
 end
+
+end
+
  

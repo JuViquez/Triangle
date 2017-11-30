@@ -415,6 +415,7 @@ public class Interpreter {
         data[addr] = (int) accumulator;
         break;
       case Machine.putintDisplacement:
+          
         ST = ST - 1;
         accumulator = data[ST];
         System.out.print(accumulator);
@@ -456,6 +457,7 @@ public class Interpreter {
       // Execute instruction ...
       switch (op) {
         case Machine.LOADop:
+            
           addr = d + content(r);
           checkSpace(n);
           for (index = 0; index < n; index++)
@@ -562,7 +564,7 @@ public class Interpreter {
           ST = ST - 1;
           CP = data[ST];
           break;
-        case Machine.JUMPIFop:
+        case Machine.JUMPIFop:           
           ST = ST - 1;
           if (data[ST] == n)
             CP = d + content(r); 

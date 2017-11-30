@@ -215,7 +215,6 @@ public final class Encoder implements Visitor {
      Frame frame = (Frame) o;
      int loopAddr, jumpAddr, idAddr, exp2Addr, extraSize, extraSize2;
      
-     exp2Addr = nextInstrAddr;
      extraSize = (Integer) ast.E.visit(this, frame);
      
      Frame frame1 = new Frame (frame, extraSize);
@@ -225,12 +224,13 @@ public final class Encoder implements Visitor {
      jumpAddr = nextInstrAddr;
      emit(Machine.JUMPop, 0, Machine.CBr, 0);
      
+     Frame frame2 = new Frame (frame, extraSize2 + extraSize);
      loopAddr = nextInstrAddr;
-     ast.C.visit(this, frame);
+     ast.C.visit(this, frame2);
      emit(Machine.CALLop, idAddr, Machine.PBr, Machine.succDisplacement);
      
      patch(jumpAddr, nextInstrAddr);
-     emit(Machine.LOADop, extraSize + extraSize2, Machine.CBr, exp2Addr);
+     emit(Machine.LOADop, extraSize + extraSize2, Machine.STr, -2);
      emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.geDisplacement);
      emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
      emit(Machine.POPop, 0, 0, extraSize + extraSize2);
@@ -257,11 +257,11 @@ public final class Encoder implements Visitor {
      
      jumpAddr2 = nextInstrAddr;
      emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, 0);
-     
-     ast.C.visit(this, frame);
+      Frame frame2 = new Frame (frame, extraSize2 + extraSize);
+     ast.C.visit(this, frame2);
      emit(Machine.CALLop, idAddr, Machine.PBr, Machine.succDisplacement);
      patch(jumpAddr, nextInstrAddr);
-     emit(Machine.LOADop, extraSize + extraSize2, Machine.CBr, exp1Addr);
+     emit(Machine.LOADop, extraSize + extraSize2, Machine.STr, -2);
      emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.geDisplacement);
      emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
      
@@ -290,16 +290,16 @@ public final class Encoder implements Visitor {
      
      jumpAddr2 = nextInstrAddr;
      emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, 0);
-     
-     ast.C.visit(this, frame);
+      Frame frame2 = new Frame (frame, extraSize2 + extraSize);
+     ast.C.visit(this, frame2);
      emit(Machine.CALLop, idAddr, Machine.PBr, Machine.succDisplacement);
      patch(jumpAddr, nextInstrAddr);
-     emit(Machine.LOADop, extraSize + extraSize2, Machine.CBr, exp1Addr);
+    emit(Machine.LOADop, extraSize + extraSize2, Machine.STr, -2);
      emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.geDisplacement);
      emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
      
      patch(jumpAddr2, nextInstrAddr);
-     emit(Machine.POPop, 0, 0, extraSize + extraSize2);
+     emit(Machine.POPop, 0, 0, extraSize+extraSize2);
      
      return null;
      
